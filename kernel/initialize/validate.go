@@ -15,15 +15,6 @@ import (
 )
 
 func InitValidator(locale string) {
-	initTrans(locale)
-	if v, res := binding.Validator.Engine().(*validator.Validate); res {
-		// 注册自定义验证器
-		_ = v.RegisterValidation("mobile", utils.ValidateMobile)
-	}
-}
-
-// initTrans 初始化翻译器
-func initTrans(locale string) {
 	// 修改gin框架中的Validator引擎属性，实现自定制
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		zhT := zh.New() // 中文翻译器
@@ -54,5 +45,8 @@ func initTrans(locale string) {
 		if err != nil {
 			kernel.FdLog.Error("Init Trans failed, err:", zap.Error(err))
 		}
+
+		// 注册自定义验证器
+		_ = v.RegisterValidation("mobile", utils.ValidateMobile)
 	}
 }
